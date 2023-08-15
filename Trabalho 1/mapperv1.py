@@ -7,8 +7,8 @@ class Mapper:
   def __init__(self):
     self.H = {}
 
-  def map(self, _, line):
-    terms = line.strip().split()
+  def map(self, docid, doc):
+    terms = doc.strip().split()
     for term in terms:
       cleaned_term = re.sub(r'[.,?!()"\'$#]', '', term.lower())
       if cleaned_term and cleaned_term != '-':
@@ -24,5 +24,6 @@ class Mapper:
 if __name__ == "__main__":
   mapper = Mapper()
   for line in sys.stdin:
-    mapper.map(None, line)
+    docid, doc = line.strip().split('\t')
+    mapper.map(docid, doc)
   mapper.close()

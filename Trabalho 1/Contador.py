@@ -20,6 +20,10 @@ def ContadorDePalavras(documento):
     for palavra in palavras_ordenadas[:10]:
         print(f'{palavra}: {palavra_numero[palavra]}')
 
+    with open("histograma.txt", "w") as output_file:
+      for palavra in palavras_ordenadas:
+        output_file.write(f'{palavra}: {palavra_numero[palavra]}\n')
+
 
 arquivo_path = 'part-00000'  
 ContadorDePalavras(arquivo_path)

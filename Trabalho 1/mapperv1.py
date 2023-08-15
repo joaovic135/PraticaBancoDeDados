@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import re
 
 class Mapper:
   def __init__(self):
@@ -9,6 +10,7 @@ class Mapper:
   def map(self, docid, doc):
     for term in doc.split():
       if term in self.H:
+        cleaned_term = re.sub(r'[.,?!]','',term.lower())
         self.H[term] += 1
       else:
         self.H[term] = 1

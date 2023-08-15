@@ -10,7 +10,7 @@ class Reducer:
 if __name__ == "__main__":
   reducer = Reducer()
   current_term = None
-  current_count = []
+  current_counts = []
 
   for line in sys.stdin:
     term,count = line.strip().split('\t')

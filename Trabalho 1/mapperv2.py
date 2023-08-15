@@ -4,11 +4,11 @@ import sys
 import re
 
 class Mapper:
-  def __init__(self):
-    self.H = {}
+    def __init__(self):
+        self.H = {}
 
-  def map(self, _, line):
-    docid, doc = line.strip().split('\t')
+    def map(self, line):
+        docid, doc = line.strip().split('\t')
         terms = doc.split()
         for term in terms:
             cleaned_term = re.sub(r'[.,?!()"\'$#]', '', term.lower())
@@ -27,8 +27,3 @@ if __name__ == "__main__":
     for line in sys.stdin:
         mapper.map(line)
     mapper.close()
-
-
-
-
-

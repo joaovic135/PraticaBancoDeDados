@@ -8,7 +8,7 @@ class Mapper:
       self.H = {}
 
   def map(self, line):
-    docid, doc = line.strip().split('\t')
+    doc = line.strip()
     terms = doc.split()
     for term in terms:
       cleaned_term = re.sub(r'[.,?!()"\'$#]', '', term.lower())

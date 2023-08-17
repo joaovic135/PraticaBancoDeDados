@@ -10,7 +10,7 @@ class Mapper:
   def map(self, _, line):
     terms = line.strip().split()
     for term in terms:
-      cleaned_term = re.sub(r'[.,?!()"\'$#]', '')
+      cleaned_term = re.sub(r'[.,?!()"\'$#]', '', term)
       if cleaned_term and cleaned_term != '-':
         if cleaned_term in self.H:
           self.H[cleaned_term] += 1

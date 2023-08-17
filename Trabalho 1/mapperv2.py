@@ -11,7 +11,7 @@ class Mapper:
     doc = line.strip()
     terms = doc.split()
     for term in terms:
-      cleaned_term = re.sub(r'[.,?!()"\'$#]', '', term.lower())
+      cleaned_term = re.sub(r'[.,?!()"\'$#]', '')
       if re.match(r'^[a-zA-Z]+$', cleaned_term):  # Verifica se a palavra tem apenas letras
         if cleaned_term in self.H:
           self.H[cleaned_term] += 1

@@ -77,6 +77,49 @@ commits:
 | 15/08/2023 | 13:50 – 14:07 | Criação e ajustes do `mapperv2.py` (só palavras formadas por letras). |
 | 16/08/2023 | 23:05 – 23:52 | Ajuste final dos dois mappers: retirada do `lower()`. |
 
+## Resultado
+
+Resultado da execução sobre o `shakespeare.txt` completo:
+
+| Métrica | `mapperv1.py` | `mapperv2.py` |
+|---------|---------------|---------------|
+| Ocorrências contadas | 20.694 | **19.940** |
+| Termos distintos | 4.598 | **4.016** |
+| Termos que aparecem só uma vez | 2.859 | **2.348** |
+
+As duas versões geram o mesmo top 10, porque o filtro do `mapperv2.py` só remove termos
+pouco frequentes (números, palavras com hífen e símbolos):
+
+| # | Palavra | Ocorrências |
+|---|---------|-------------|
+| 1 | the | 514 |
+| 2 | of | 457 |
+| 3 | to | 405 |
+| 4 | I | 344 |
+| 5 | my | 341 |
+| 6 | in | 339 |
+| 7 | and | 317 |
+| 8 | thy | 252 |
+| 9 | that | 250 |
+| 10 | And | 242 |
+
+Outras palavras de destaque: `thou` (208), `love` (149) + `Love` (10), `thee` (145),
+`beauty` (50), `time` (36) + `Time` (13).
+
+**Análise**
+
+- O ranking é dominado por *stopwords*, o comportamento esperado em textos em inglês.
+  Para destacar palavras de conteúdo, seria preciso remover uma lista de stopwords no
+  mapper.
+- `thy`, `thou` e `thee` refletem o inglês arcaico do texto, e `love` é a palavra de
+  conteúdo mais frequente, coerente com o tema dos sonetos.
+- Como não há normalização para minúsculas, a mesma palavra se divide em duas entradas
+  (`and`/`And`, `the`/`The`, `love`/`Love`). Aplicar `lower()` no mapper juntaria essas
+  contagens.
+- O cabeçalho e a licença do Project Gutenberg (linhas 1–36 e 2674–3029) também são
+  contados. Por isso `Project` aparece 83 vezes. Recortar só o trecho dos sonetos
+  deixaria o resultado mais fiel à obra.
+
 ## Visão geral do fluxo
 
 ```

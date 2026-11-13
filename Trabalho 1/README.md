@@ -17,10 +17,23 @@ palavras em um texto real. A atividade pede para:
 - analisar o resultado, identificando as **palavras mais frequentes** e gerando um
   **histograma** de frequência de todas as palavras.
 
-## Como a atividade foi feita
+## Metodologia
 
-O desenvolvimento seguiu as etapas abaixo (o histórico de commits do repositório mostra
-cada uma delas):
+### O quê
+
+| Item | Descrição |
+|------|-----------|
+| Problema | Contar quantas vezes cada palavra aparece em um texto (*word count*). |
+| Modelo | MapReduce, com scripts Python no formato do Hadoop Streaming (`stdin` → `stdout`). |
+| Dados de entrada | `shakespeare.txt`, os *Sonetos* de Shakespeare (Project Gutenberg #1041, 3.029 linhas). |
+| Técnicas | In-mapper combining, limpeza de pontuação com expressões regulares, shuffle/sort pela palavra e soma no reducer. |
+| Ferramentas | Python 3 (biblioteca padrão: `sys` e `re`), Hadoop Streaming ou `sort` para simular o shuffle localmente, e Git/GitHub para versionamento. |
+| Entregáveis | `mapperv1.py`, `mapperv2.py`, `reducerv1.py`, `Contador.py` e as saídas `part-00000` e `histograma.txt`. |
+
+### Como
+
+O desenvolvimento foi incremental: a cada mudança o pipeline era executado de novo e a
+saída era conferida para decidir o próximo ajuste. As etapas foram:
 
 1. **Mapper e reducer iniciais.** A primeira versão do `mapperv1.py` seguia o pseudocódigo
    clássico do word count com in-mapper combining: lia linhas no formato
@@ -49,6 +62,20 @@ cada uma delas):
 6. **Ajuste final.** Nas versões finais dos dois mappers, a conversão para minúsculas
    (`lower()`) foi removida, então a contagem passou a diferenciar maiúsculas de
    minúsculas.
+
+### Quando
+
+A atividade foi desenvolvida em **15 e 16 de agosto de 2023**, segundo as datas dos
+commits:
+
+| Data | Horário | Etapa |
+|------|---------|-------|
+| 15/08/2023 | 09:59 – 10:03 | Criação do repositório e do README. |
+| 15/08/2023 | 11:40 | Primeira versão do `mapperv1.py` e do `reducerv1.py`. |
+| 15/08/2023 | 11:58 – 12:55 | Inclusão do `shakespeare.txt`, adaptação do mapper à entrada sem `docid` e remoção da pontuação. |
+| 15/08/2023 | 12:58 – 13:02 | Criação do `Contador.py` (top 10 e `histograma.txt`). |
+| 15/08/2023 | 13:50 – 14:07 | Criação e ajustes do `mapperv2.py` (só palavras formadas por letras). |
+| 16/08/2023 | 23:05 – 23:52 | Ajuste final dos dois mappers: retirada do `lower()`. |
 
 ## Visão geral do fluxo
 

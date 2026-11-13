@@ -4,6 +4,52 @@ Implementação do clássico *word count* no modelo **MapReduce**, com scripts P
 compatíveis com o **Hadoop Streaming** (leem da entrada padrão e escrevem na saída padrão).
 A entrada é o texto dos *Sonetos* de William Shakespeare, obtido no Project Gutenberg.
 
+## Objetivo
+
+Praticar o modelo de programação **MapReduce** resolvendo o problema de contagem de
+palavras em um texto real. A atividade pede para:
+
+- escrever um **mapper** e um **reducer** em Python que rodem no Hadoop Streaming;
+- **limpar o texto**, tirando a pontuação para que palavras como `love,` e `love` sejam
+  contadas juntas;
+- aplicar o padrão **in-mapper combining**, agregando as contagens ainda no mapper para
+  diminuir o volume de dados enviado ao reducer;
+- analisar o resultado, identificando as **palavras mais frequentes** e gerando um
+  **histograma** de frequência de todas as palavras.
+
+## Como a atividade foi feita
+
+O desenvolvimento seguiu as etapas abaixo (o histórico de commits do repositório mostra
+cada uma delas):
+
+1. **Mapper e reducer iniciais.** A primeira versão do `mapperv1.py` seguia o pseudocódigo
+   clássico do word count com in-mapper combining: lia linhas no formato
+   `docid<TAB>documento`, separava as palavras por espaços e acumulava as contagens em um
+   dicionário `H`, emitindo `palavra<TAB>contagem` no `close()`. O `reducerv1.py` já
+   recebia as linhas ordenadas e somava as contagens de cada palavra.
+
+2. **Adaptação à entrada real.** Com a inclusão do `shakespeare.txt`, que é texto corrido
+   e não tem o campo `docid`, o mapper passou a tratar **cada linha da entrada como
+   documento**, sem esperar o separador `TAB`.
+
+3. **Remoção da pontuação.** Em várias iterações, o mapper ganhou uma expressão regular
+   para retirar a pontuação colada às palavras. Primeiro foram tratados `. , ? !`; depois
+   a lista foi ampliada para `( ) " ' $ #`, e foram descartados os termos que ficavam
+   vazios ou eram só um hífen (`-`).
+
+4. **Análise do resultado.** Foi criado o `Contador.py`, que lê a saída do job
+   (`part-00000`), ordena as palavras por frequência, mostra as 10 mais frequentes e grava
+   o histograma completo em `histograma.txt`.
+
+5. **Segunda versão do mapper.** A saída do `mapperv1.py` ainda trazia números, palavras
+   com hífen e outros símbolos. Por isso foi criado o `mapperv2.py`, que mantém a mesma
+   estrutura mas só conta termos formados **apenas por letras**, gerando um histograma
+   mais limpo.
+
+6. **Ajuste final.** Nas versões finais dos dois mappers, a conversão para minúsculas
+   (`lower()`) foi removida, então a contagem passou a diferenciar maiúsculas de
+   minúsculas.
+
 ## Visão geral do fluxo
 
 ```
